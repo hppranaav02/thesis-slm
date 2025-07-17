@@ -1,0 +1,8 @@
+peft
+trl
+bitsandbytes
+# transfrormers
+torch
+matplotlib
+seaborn
+scikit-learn
