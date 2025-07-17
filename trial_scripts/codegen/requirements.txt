@@ -1,0 +1,27 @@
+# Core ML libraries
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+peft>=0.4.0
+trl>=0.7.1
+
+# Quantization support
+bitsandbytes>=0.39.0
+
+# Utilities and data processing
+tqdm>=4.65.0
+numpy>=1.24.0
+pandas>=2.0.0
+scikit-learn>=1.2.0
+
+# Visualization (if needed for metric reporting)
+matplotlib>=3.7.0
+
+# Logging and experiment tracking
+wandb>=0.15.0
+
+# Optional: JSON handling
+jsonlines>=3.1.0
+
+# GPU memory management
+accelerate>=0.20.0
