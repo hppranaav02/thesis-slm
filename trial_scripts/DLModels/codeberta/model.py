@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader
-from transformers import AutoTokenizer, AutoModel, AdamW, get_linear_schedule_with_warmup
+from torch.optim import AdamW
+from transformers import AutoTokenizer, AutoModel, get_linear_schedule_with_warmup
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support, multilabel_confusion_matrix
 from sklearn.preprocessing import MultiLabelBinarizer
 import pandas as pd
@@ -490,10 +491,13 @@ class GoCodeCWETrainer:
 
 # Example usage
 def main():
-    # Load your dataset
+    # Load the dataset csv
     # df = pd.read_csv('your_dataset.csv')  # Should have 'input' and 'output' columns
+
+    # Load the dataset json
+    df = pd.read_json('/local/s3905020/code/dataset-creation/train.jsonl', lines=True)  # Should have 'input' and 'output' columns
     
-    # Example dataset with large code
+    # Test dataset with large code
     sample_data = {
         'input': [
             'package main\nimport "fmt"\nfunc main() {\n    fmt.Println("Hello, World!")\n}',
@@ -578,7 +582,8 @@ func main() {
         ]
     }
     
-    df = pd.DataFrame(sample_data)
+    # Comment when loading from file
+    # df = pd.DataFrame(sample_data)
     
     # Initialize trainer with chunking options
     trainer = GoCodeCWETrainer(
