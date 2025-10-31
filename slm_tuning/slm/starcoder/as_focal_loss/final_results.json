@@ -1,0 +1,65 @@
+{
+  "training_metrics": {
+    "train_runtime": 4229.2085,
+    "train_samples_per_second": 15.438,
+    "train_steps_per_second": 0.485,
+    "total_flos": 0.0,
+    "train_loss": 0.5814640704209243,
+    "epoch": 6.0
+  },
+  "test_metrics": {
+    "accuracy": 0.5835714285714285,
+    "precision": 0.5469125902165196,
+    "recall": 0.9742857142857143,
+    "f1": 0.7005649717514124,
+    "roc_auc": 0.6153357142857143,
+    "optimal_threshold": 0.26000000000000006,
+    "confusion_matrix": [
+      [
+        135,
+        565
+      ],
+      [
+        18,
+        682
+      ]
+    ]
+  },
+  "config": {
+    "model_name": "bigcode/starcoderbase-1b",
+    "loss_type": "asymmetric_focal",
+    "max_length": 512,
+    "hidden_size": 2048,
+    "num_labels": 2,
+    "args": {
+      "input_data": "./ds.jsonl",
+      "output_dir": "./as_focal_loss",
+      "model_name": "bigcode/starcoderbase-1b",
+      "max_length": 512,
+      "batch_size": 4,
+      "gradient_accumulation_steps": 8,
+      "learning_rate": 0.0002,
+      "num_epochs": 10,
+      "warmup_steps": 100,
+      "weight_decay": 0.01,
+      "loss_type": "asymmetric_focal",
+      "focal_alpha": 0.25,
+      "focal_gamma": 2.0,
+      "asl_gamma_pos": 0.0,
+      "asl_gamma_neg": 4.0,
+      "lora_r": 8,
+      "lora_alpha": 32,
+      "lora_dropout": 0.05,
+      "train_split": 0.7,
+      "val_split": 0.15,
+      "test_split": 0.15,
+      "balance_classes": true,
+      "use_gradient_checkpointing": true,
+      "use_8bit_optimizer": true,
+      "fp16": true,
+      "device": "cuda:1",
+      "seed": 42,
+      "save_visualizations": true
+    }
+  }
+}
