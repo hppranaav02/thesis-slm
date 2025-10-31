@@ -1,0 +1,43 @@
+{
+  "total_samples": 2860,
+  "num_cwe_classes": 14,
+  "train_samples": 2001,
+  "val_samples": 430,
+  "test_samples": 429,
+  "avg_code_length_tokens": 215.5555944055944,
+  "std_code_length_tokens": 544.8486574239444,
+  "min_code_length_tokens": 5,
+  "max_code_length_tokens": 8028,
+  "class_distribution": {
+    "22": 206,
+    "400": 156,
+    "863": 120,
+    "59": 92,
+    "78": 199,
+    "94": 85,
+    "89": 179,
+    "770": 183,
+    "129": 227,
+    "319": 127,
+    "269": 117,
+    "79": 126,
+    "918": 87,
+    "200": 97
+  },
+  "cwe_list": [
+    129,
+    200,
+    22,
+    269,
+    319,
+    400,
+    59,
+    770,
+    78,
+    79,
+    863,
+    89,
+    918,
+    94
+  ]
+}
