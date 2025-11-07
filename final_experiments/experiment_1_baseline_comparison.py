@@ -1,7 +1,6 @@
 
 """
 Experiment 1: Baseline Model Comparison
-Compares CodeBERT, GraphCodeBERT, and CodeT5-small with standard training
 """
 
 import os

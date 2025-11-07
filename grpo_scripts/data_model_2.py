@@ -1,9 +1,6 @@
 from typing import List, Optional, Union
 from pydantic import BaseModel, Field
 import json
-# ---------------------------------------------------------------------------
-#  Single-label schema (kept for backwards compatibility, if you still need it)
-# ---------------------------------------------------------------------------
 class ResponseFormat(BaseModel):
     type: str = Field(..., description="json")
     vulnerability: bool = Field(
@@ -18,9 +15,6 @@ class ResponseFormat(BaseModel):
     )
 
 
-# ---------------------------------------------------------------------------
-#  Multi-label schema for Scenario 2
-# ---------------------------------------------------------------------------
 class ResponseFormatMulti(BaseModel):
     type: str = Field(..., description="json")
     vulnerability: bool = Field(
@@ -36,10 +30,6 @@ class ResponseFormatMulti(BaseModel):
         None, description="Line(s) of code where the vulnerability is found"
     )
 
-
-# ---------------------------------------------------------------------------
-#  Prompts
-# ---------------------------------------------------------------------------
 instruction_single = (
     "Classify the Go code as Vulnerable or Secure, provide the CWE ID if applicable, "
     "think step by step, and always return reasoning and the line of code as source.\n"

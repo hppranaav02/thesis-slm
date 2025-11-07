@@ -1,7 +1,4 @@
-"""
-Fine-tune Qwen2.5-Coder-1.5B for Golang CWE Classification
-This script trains the model to identify CWE codes in Golang code.
-"""
+
 
 import torch
 from transformers import (

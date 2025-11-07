@@ -1,21 +1,4 @@
 #!/usr/bin/env python3
-"""
-pg2train.py
-===========
-
-Pull rows from PostgreSQL, group by file_change_id, and emit TWO examples
-per change (vulnerable + secure) for your CWE-training pipeline.
-
-CWE filtering
--------------
-  • --min-count K   keep CWEs with frequency ≥ K   (default: 2)
-  • --top N         keep the N most common CWEs    (overrides --min-count)
-
-Required columns in query/table
--------------------------------
-  file_change_id, cwe_id, code_before, code_after, diff (if using --use diff/hybrid)
-"""
-
 import argparse
 import json
 import os
@@ -29,8 +12,6 @@ from tqdm import tqdm
 
 from stratified_split import stratified_multilabel_split, save_jsonl
 
-
-# ──────────────────────────── DB Helpers ──────────────────────────────── #
 def connect_pg(cfg) -> psycopg2.extensions.connection:
     return psycopg2.connect(
         host=cfg.host,
@@ -50,7 +31,6 @@ def fetch_rows(cur, table: str, query_file: Path | None) -> List[Dict[str, Any]]
     return cur.fetchall()  # DictCursor → list[dict]
 
 
-# ─────────────────────────── File Helpers ─────────────────────────────── #
 def write_jsonl(items: List[Dict[str, Any]], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8") as f:
@@ -70,7 +50,6 @@ def choose_code(row: Dict[str, Any], strategy: str, before: bool) -> str:
     raise ValueError(strategy)
 
 
-# ───────────────────────────── CLI ─────────────────────────────────────── #
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description="PostgreSQL → model-ready JSONL")
 
@@ -114,24 +93,19 @@ def parse_args() -> argparse.Namespace:
     return p.parse_args()
 
 
-# ───────────────────────────── main ────────────────────────────────────── #
 def main() -> None:
     cfg = parse_args()
 
-    # 1. Fetch rows
     with connect_pg(cfg) as conn, conn.cursor(cursor_factory=DictCursor) as cur:
         rows = fetch_rows(cur, cfg.table, cfg.query)
     print(f"Fetched {len(rows)} rows.")
 
-    # optional raw dump
     if cfg.raw:
         write_jsonl(rows, cfg.raw)
         print(f"Raw rows → {cfg.raw}")
 
-    # 2. Build frequency map
     freq = Counter(r["cwe_id"] for r in rows if r.get("cwe_id"))
 
-    # Select allowed CWEs
     if cfg.top is not None:
         most_common = {cwe for cwe, _ in freq.most_common(cfg.top)}
         allowed = most_common
@@ -140,12 +114,10 @@ def main() -> None:
         allowed = {cwe for cwe, cnt in freq.items() if cnt >= cfg.min_count}
         print(f"Keeping CWEs with count ≥ {cfg.min_count} ({len(allowed)} unique).")
 
-    # 3. Group rows by change
     grouped: DefaultDict[Any, List[Dict[str, Any]]] = defaultdict(list)
     for r in rows:
         grouped[r["file_change_id"]].append(r)
 
-    # 4. Build training examples
     examples: List[Dict[str, Any]] = []
     dropped = 0
     for rows_same_change in tqdm(grouped.values(), desc="Building examples"):
@@ -173,9 +145,6 @@ def main() -> None:
             "source": []
         })
 
-    # 5. Write
-    # write_jsonl(examples, cfg.train)
-    # Pair vulnerable+secure rows (order is guaranteed)
     pairs = [(examples[i], examples[i + 1]) for i in range(0, len(examples), 2)]
 
     train_pairs, test_pairs = stratified_multilabel_split(

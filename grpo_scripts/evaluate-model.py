@@ -29,8 +29,6 @@ def preprocess(examples):
     print("Inputs tokenized successfully.")
 
     # Pad the tokens to maximum length
-
-    #ask what this does
     with tokenizer.as_target_tokenizer():
         outputs= []
         for output in zip(examples["output"]):

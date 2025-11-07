@@ -1,4 +1,4 @@
-# stratified_split.py ---------------------------------------------------------
+
 import json, random
 from pathlib import Path
 from collections import Counter

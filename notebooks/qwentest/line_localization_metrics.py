@@ -1,17 +1,6 @@
 
 """
 Line Localization Metrics & Visualization Helpers
-
-This module provides metrics and plotting utilities for line-level vulnerability localization.
-It is designed to slot into your existing evaluation pipeline with minimal changes.
-
-Expected columns in your evaluation DataFrame (flexible & auto-detected):
-- "cwe": CWE ID per sample (int or str)
-- "true_lines": list[int] (or string like "[12, 19]") of ground-truth vulnerable lines (1-indexed or 0-indexed; we auto-detect)
-- "pred_line": int, the model's best-guess vulnerable line (same indexing convention as true_lines)
-Optional:
-- "pred_ranked_lines": list[int], ranked list of candidate lines (best first)
-- "n_lines": int, total number of lines in the file (for normalization and scatter plots)
 """
 
 from typing import List, Dict, Any, Iterable, Tuple

@@ -26,20 +26,16 @@ def save_json(data, path):
 
 def main(args):
     os.makedirs(args.output_dir, exist_ok=True)
-
-    # Load dataset and optionally subsample
     dataset = load_dataset("json", data_files=args.data_file, split="train")
     if args.data_fraction < 1.0:
         dataset = dataset.train_test_split(test_size=(1 - args.data_fraction), seed=42)["train"]
     dataset = dataset.train_test_split(test_size=0.2)
 
-    # Load model and tokenizer
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
     model = AutoModelForSeq2SeqLM.from_pretrained(args.model_name)
 
     tokenized = preprocess_dataset(dataset, tokenizer)
 
-    # Training arguments
     training_args = Seq2SeqTrainingArguments(
         output_dir=os.path.join(args.output_dir, "model"),
         evaluation_strategy="epoch",
@@ -83,7 +79,7 @@ def main(args):
         "classification_report": report
     }, os.path.join(args.output_dir, "metrics.json"))
 
-    print(f"✅ Done. Accuracy: {accuracy:.4f}. Results saved to {args.output_dir}")
+    print(f"Done. Accuracy: {accuracy:.4f}. Results saved to {args.output_dir}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

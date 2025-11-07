@@ -2,7 +2,6 @@ import json
 import pandas as pd
 import matplotlib.pyplot as plt
 
-# 1. Load the JSONL into a DataFrame
 records = []
 with open('/local/s3905020/code/dataset-creation/train.jsonl', 'r') as f:
     for line in f:
@@ -13,7 +12,6 @@ with open('/local/s3905020/code/dataset-creation/train.jsonl', 'r') as f:
         })
 df = pd.DataFrame(records)
 
-# 2. Basic counts
 df['is_secure'] = df['cwes'].apply(lambda x: len(x) == 0)
 total = len(df)
 secure_count = df['is_secure'].sum()
@@ -22,7 +20,6 @@ print(f"Total snippets: {total}")
 print(f"Secure: {secure_count} ({secure_count/total:.1%})")
 print(f"Insecure: {insecure_count} ({insecure_count/total:.1%})")
 
-# 3. Distribution of CWE counts per snippet
 df['num_cwes'] = df['cwes'].apply(len)
 # print("CWE count stats:")
 # print(df['num_cwes'].describe())
@@ -35,7 +32,6 @@ print("CWE counts:")
 for cwe, count in cwe_counts.items():
     print(f"{cwe}: {count} snippets")
 
-# Optional: Visualize the distribution of CWE counts
 plt.figure(figsize=(10, 6))
 df['num_cwes'].hist(bins=range(df['num_cwes'].max()+2), edgecolor='black')
 plt.title('Distribution of CWE Counts per Snippet')
@@ -52,7 +48,6 @@ plt.show()
 # plt.ylabel('Number of Snippets')
 # plt.show()
 
-# 4. CWE frequency ranking
 from collections import Counter
 all_cwes = [cwe for sublist in df['cwes'] for cwe in sublist]
 cwe_counts = Counter(all_cwes)
@@ -61,7 +56,6 @@ print("Top 10 CWE IDs:")
 for cwe, cnt in top10:
     print(f"  {cwe}: {cnt} occurrences")
 
-#(Optional) Code length vs. CWE count
 # df['loc'] = df['code'].apply(lambda s: len(s.splitlines()))
 # corr = df[['loc', 'num_cwes']].corr().iloc[0,1]
 # print(f"Correlation between LOC and CWE count: {corr:.2f}")
